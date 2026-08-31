@@ -1,0 +1,6 @@
+# 词库与 lua 全部以 LF 存储，避免 Windows 检出时 CRLF 污染 librime 的解析
+* text=auto eol=lf
+*.ocd2 binary
+*.webp binary
+*.png binary
+*.gram binary
