@@ -32,6 +32,8 @@ switches:
       states: [ 地, 煋 ] #火星文
     - name: ascii_punct
       states: [ 。，, ．， ]
+    - name: auto_commit_spacing   # Qiwo 追加：中英数字自动空格
+      states: [ 关闭中英数字自动空格, 开启中英数字自动空格 ]
 
 engine:
     processors:

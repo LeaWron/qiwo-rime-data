@@ -41,6 +41,8 @@ switches:
 
   - name: chaifen
     states: [ 拆分不提示, 拆分提示 ]
+  - name: auto_commit_spacing   # Qiwo 追加：中英数字自动空格
+    states: [ 关闭中英数字自动空格, 开启中英数字自动空格 ]
 
 
 # 输入引擎

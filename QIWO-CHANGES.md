@@ -87,6 +87,32 @@ end
 
 全仓 `lua/` 只有这一处存在该问题。
 
+### `default.yaml` 与各方案：内置 Qiwo 的默认开关
+
+以下设置原本由 `init-frost` 在**用户的** `default.custom.yaml` / `*.custom.yaml`
+里做字符串拼接注入。那套拼接会在用户手改过配置时毁掉它——例如用户写了
+`patch: # 我的配置`，锚点匹配不上，就会再追加一个顶层 `patch:` 键，yaml-cpp
+取后者，用户原有的整个 `schema_list` 被静默丢弃。Rust 与 C++ 两侧各有一份
+同样的实现，同样的毛病。
+
+改为放在分发层，走 Rime 正确的分层：分发层给默认值，用户在自己的
+`*.custom.yaml` 里覆盖，我们只读不写。
+
+| 文件 | 追加 |
+| --- | --- |
+| `default.yaml` → `switcher/hotkeys` | `- F4` |
+| `default.yaml` → `switcher/save_options` | `- auto_commit_spacing` |
+| 9 个自带 `switches:` 的 `rime_frost*.schema.yaml` | `auto_commit_spacing` 开关 |
+
+`rime_frost_aux` 与 `rime_frost_t9` 通过 `__include` 继承 `rime_frost.schema.yaml`
+的 `switches`，**不要**给它们单独加，否则会重复。
+
+`default.yaml` 的 `schema_list` 本来就以 `rime_frost` 打头，原先注入的那条
+`schema_list` patch 是冗余的，一并去掉。
+
+注意：开关未设 `reset`，故初始值为状态 0（关闭），由 `save_options` 记忆。
+这与原先注入的行为一致；若要改为默认开启需另行决定。
+
 ---
 
 ## 3. 为什么是 squash 而不是 fork 完整历史
@@ -106,8 +132,9 @@ rime-frost 一年更新数次，可以接受。
 1. 克隆或更新一份上游工作副本，检出目标 commit。
 2. 把上游工作树复制过来，排除 `.git`、`others/`、`cn_dicts/tencent.dict.yaml`
    （**只按目录前缀 `others/` 排除**，见上文陷阱）。
-3. 重新施加第 2 节的代码修改；逐条核对是否仍然必要
-   （若上游已自行修复，则从本文件移除该条）。
+3. 重新施加第 2 节的**全部**修改（corrector.lua 回退、`default.yaml` 的
+   F4 与 save_options、9 个方案的 auto_commit_spacing 开关）；逐条核对是否
+   仍然必要（若上游已自行修复，则从本文件移除该条）。
 4. 更新本文件的「上游基线」与日期，在下方追加一条导入记录。
 5. 单提交提交，commit message 写明上游 commit 与本次改动。
 6. 跑一次真机验证：部署成功、候选正常、错音错字提示可见
@@ -118,3 +145,4 @@ rime-frost 一年更新数次，可以接受。
 | 日期 | 上游 commit | 备注 |
 | --- | --- | --- |
 | 2026-08-31 | `6af2892` | 首次导入；删 `others/` 与 `tencent.dict.yaml`；补 `corrector.lua` 共享目录回退 |
+| 2026-08-31 | `6af2892` | 内置 Qiwo 默认开关（`default.yaml` 的 F4 / save_options，9 个方案的 auto_commit_spacing），取代 init-frost 对用户文件的字符串拼接 |

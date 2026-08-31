@@ -58,6 +58,8 @@ switches:
   - name: pin_cand
     reset: 1
     states: [ 固顶关, 固顶开 ]
+  - name: auto_commit_spacing   # Qiwo 追加：中英数字自动空格
+    states: [ 关闭中英数字自动空格, 开启中英数字自动空格 ]
 
 # 输入引擎
 engine:
