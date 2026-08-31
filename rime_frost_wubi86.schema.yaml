@@ -56,7 +56,7 @@ engine:
     - punctuator
     - selector
     - navigator
-    - express_editor
+    - fluid_editor
   segmentors:
     - ascii_segmentor
     - matcher

@@ -146,3 +146,17 @@ rime-frost 一年更新数次，可以接受。
 | --- | --- | --- |
 | 2026-08-31 | `6af2892` | 首次导入；删 `others/` 与 `tencent.dict.yaml`；补 `corrector.lua` 共享目录回退 |
 | 2026-08-31 | `6af2892` | 内置 Qiwo 默认开关（`default.yaml` 的 F4 / save_options，9 个方案的 auto_commit_spacing），取代 init-frost 对用户文件的字符串拼接 |
+
+### 10 个白霜系方案：`express_editor` → `fluid_editor`（2026-08-31）
+
+express_editor 的 BackSpace 绑定 `RevertLastEdit`——只有「紧随选词之后」
+按退格才回退该次选择，一旦中间发生过光标移动等任何操作就退化为删除
+末字符。移动端预编辑点击编辑是一等交互（Qiwo Android 的核心功能），
+「选了词 → 移光标 → 想撤销选择」是高频路径，express 语义在此不可用。
+
+fluid_editor 的 BackSpace 绑定 `BackToPreviousInput`：
+`ReopenPreviousSegment() || ReopenPreviousSelection() || PopInput()`——
+无条件先尝试回退已确认段，与光标状态无关；无段可回退时才删字符。
+
+涉及：`rime_frost*.schema.yaml` 全部 10 个（melt_eng 英文方案与
+cangjie5/radical_pinyin 辅助方案保持上游 express_editor 不动）。
