@@ -160,3 +160,17 @@ fluid_editor 的 BackSpace 绑定 `BackToPreviousInput`：
 
 涉及：`rime_frost*.schema.yaml` 全部 10 个（melt_eng 英文方案与
 cangjie5/radical_pinyin 辅助方案保持上游 express_editor 不动）。
+
+### 符号触发前缀 `/` → `v`（2026-08-31）
+
+`symbols_v.yaml` 的 401 个符号键与 `rime_frost.schema.yaml` 的
+recognizer punct 模式统一由 `/` 前缀改为 `v` 前缀（如 `v1` `vfh` `vxq`）。
+原因：移动端软键盘上 `/` 无法进入 rime 组合（符号面板直接上屏），
+该功能在手机上结构性不可达；`v` 是字母可正常进组合，与拼音 nv/lv
+不冲突（模式要求 v 在串首）。仅改全拼主方案系（t9/aux 继承生效）；
+双拼方案暂保持原样（v 是双拼声母键，字母型触发会冲突）。
+
+### corrector.lua 临时调试探针（2026-08-31，诊断后移除）
+
+加载路径与条目数写入用户目录 `qiwo-corrector-debug.txt`，
+排查 Android 上纠错提示无效的问题。

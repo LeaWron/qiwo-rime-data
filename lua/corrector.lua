@@ -17,14 +17,33 @@ local corrections_file = "/cn_dicts/corrections.dict.yaml"
 
 local function load_corrections()
     local corrections = {}
-    local file = io.open(rime_api.get_user_data_dir() .. corrections_file, "r")
+    -- QIWO-DEBUG：加载路径探针（Android 无 logcat/rime 日志可用，落文件到
+    -- 用户目录供 adb 读取；诊断完成后移除）
+    local dbg_lines = {}
+    local user_path = rime_api.get_user_data_dir() .. corrections_file
+    local file = io.open(user_path, "r")
+    dbg_lines[#dbg_lines + 1] = "user: " .. user_path .. " -> " .. (file and "ok" or "miss")
     -- Qiwo 修改：补共享数据目录回退。分发的词库放在共享目录，用户目录只留
     -- 个人数据，原来只查用户目录会让错音错字提示静默失效（返回空表，无报错）。
     -- 写法与同仓 lua/aux_lookup_filter.lua 一致。
-    if not file and rime_api.get_shared_data_dir then
-        file = io.open(rime_api.get_shared_data_dir() .. corrections_file, "r")
+    if not file then
+        if rime_api.get_shared_data_dir then
+            local shared_path = rime_api.get_shared_data_dir() .. corrections_file
+            file = io.open(shared_path, "r")
+            dbg_lines[#dbg_lines + 1] = "shared: " .. shared_path .. " -> " .. (file and "ok" or "miss")
+        else
+            dbg_lines[#dbg_lines + 1] = "shared: rime_api.get_shared_data_dir MISSING"
+        end
+    end
+    local function write_debug(count)
+        local dbg = io.open(rime_api.get_user_data_dir() .. "/qiwo-corrector-debug.txt", "w")
+        if dbg then
+            dbg:write(table.concat(dbg_lines, "\n") .. "\ncount=" .. tostring(count) .. "\n")
+            dbg:close()
+        end
     end
     if not file then
+        write_debug(0)
         return corrections
     end
 
@@ -42,6 +61,9 @@ local function load_corrections()
     end
 
     file:close()
+    local n = 0
+    for _ in pairs(corrections) do n = n + 1 end
+    write_debug(n)
     return corrections
 end
 
