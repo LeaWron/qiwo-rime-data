@@ -83,6 +83,7 @@ engine:
       - simplifier@traditionalize                     # 简繁切换
       - simplifier@mars                               #火星文
       - uniquifier
+      - lua_filter@*radical_fallback                   # 部件拆字无候选时保留前缀（须在最末）
 
 custom_phrase:
   dictionary: ""

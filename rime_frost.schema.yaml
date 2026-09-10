@@ -101,6 +101,7 @@ engine:
     - simplifier@traditionalize                     # 简繁切换
     - simplifier@mars                               #火星文
     - uniquifier                                    # 去重
+    - lua_filter@*radical_fallback                   # 部件拆字无候选时保留前缀（须在最末）
 
 grammar:
   language: zh-moqi  # 这个很小几乎不起作用但是不能不配置，为了让non_collocation_penalty生效（只要有值就行 不过模型不存在日志里会报错）
