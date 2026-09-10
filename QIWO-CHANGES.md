@@ -178,3 +178,27 @@ recognizer punct 模式统一由 `/` 前缀改为 `v` 前缀（如 `v1` `vfh` `v
 补充（同日）：计算器识别模式由 `^[Vv].*$` 收窄为 `^V.*$`（仅大写）——
 原模式贪婪匹配吞掉全部 v 开头输入，与改为 v 前缀的符号触发冲突。
 现在：小写 `v` = 符号（v1/vfh…），大写 `V` = 计算器（V1+2）。
+
+### 部件拆字模式：前缀常显、带声调注音、无候选兜底（2026-09-09～09-10）
+
+上游用 `affix_segmentor@radical_lookup` 把前缀（全拼 `u`、双拼 `uU`）
+切成独立的 phony 段，于是编辑栏里前缀「消失」；注音取自本方案词库的
+无声调拼音。三处修改（`rime_frost*.schema.yaml` 九个自带拆字块的方案，
+t9 经 `__include` 继承）：
+
+- **带声调注音**：新增 `kMandarin.dict.yaml`（`tools/gen_kmandarin.py`
+  从 Unicode Unihan 的 kTGHZ2013/kMandarin 生成，kTGHZ2013 优先）与
+  最小化的 `kMandarin.schema.yaml`（只为编出 `kMandarin.reverse.bin`），
+  各方案 `schema/dependencies` 加 `kMandarin`，
+  `radical_reverse_lookup/dictionary` 改指向它。
+- **前缀常显**：`radical_lookup/preedit_format` 加 `xform/^/<前缀>/`，
+  把 affix 段剥掉的前缀拼回候选的 preedit。
+- **无候选兜底**：新增 `lua/radical_fallback.lua`，挂在各方案 filters
+  **最末**（`tags_match` 只命中拆字段）。翻译结果为空时（如 `unite`）
+  补一个「前缀+编码」原文候选，preedit 与提交文本都带前缀——否则
+  librime 会回退到 phony 段之外的原文（`nite`）。这一点纯配置绕不开：
+  matcher 不独占本轮分段，去掉 affix_segmentor 会让 abc 标签合并进来、
+  拼音候选混入（曾试过 `extra_tags: [abc]`，正是此症状）。
+
+新增 `tools/simulate_keys.py`：用 rime.dll 模拟按键打印编辑栏/候选，
+改方案后本机回归用（用法见文件头）。
