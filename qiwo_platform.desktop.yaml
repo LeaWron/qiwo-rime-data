@@ -1,0 +1,6 @@
+# 平台层的桌面版本：Windows/macOS/Linux 打包时把本文件覆盖为 qiwo_platform.yaml
+#（qiwo-win build.bat / qiwo-lin CMake / qiwo-mac Makefile 各有一行）。说明见 qiwo_platform.yaml。
+#
+# editor: express_editor —— 空格直接上屏、回车上屏原始字母、退格删字母，桌面用户的习惯。
+#   fluid 在桌面上表现为「选词后还要回车」「回车变成上屏候选」，2026-09-10 拍板桌面 express。
+editor: express_editor

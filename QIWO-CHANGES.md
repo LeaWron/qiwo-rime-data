@@ -202,3 +202,15 @@ t9 经 `__include` 继承）：
 
 新增 `tools/simulate_keys.py`：用 rime.dll 模拟按键打印编辑栏/候选，
 改方案后本机回归用（用法见文件头）。
+
+### 编辑器按端选择：桌面 express_editor、移动 fluid_editor（2026-09-10）
+
+D12「全端统一 fluid_editor」在桌面上表现为「空格选词后还要回车才上屏」「回车从
+上屏字母变成上屏候选」，被当作 bug 报了两次；桌面并没有移动端那个退格约束。
+改为平台层：十个白霜系方案 `engine/processors` 里的编辑器项写成
+`__include: qiwo_platform:/editor`。仓库根目录的 `qiwo_platform.yaml` 是移动端
+默认值（fluid_editor，Android/iOS 整棵树安装即得）；`qiwo_platform.desktop.yaml`
+是桌面版本（express_editor），Windows/macOS/Linux 打包时把它覆盖为
+`qiwo_platform.yaml`。文件缺失会让所有引用它的方案编译失败（librime 沿用旧 build，
+静默出错），所以 `tools/validate.py` 与各端打包断言都检查它。
+

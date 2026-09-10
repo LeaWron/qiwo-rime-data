@@ -1,0 +1,13 @@
+# 平台层：同一份数据仓五端共用，只有这里按端不同。
+#
+# 十个白霜系方案的 engine/processors 里，编辑器一项写的是
+#   - __include: qiwo_platform:/editor
+# 引用的就是本文件。根目录这份是移动端默认值：Android/iOS 整棵树安装即得。
+# 桌面三端（Windows/macOS/Linux）打包时用 qiwo_platform.desktop.yaml 覆盖本文件。
+# 本文件缺失会让所有引用它的方案编译失败（librime 会沿用旧 build，静默出错），
+# 所以它必须随数据仓一起分发，tools/validate.py 与各端打包断言都检查它。
+#
+# editor: fluid_editor —— 空格选词后留在编辑栏、回车整句上屏、退格无条件先回退已选段。
+#   移动端预编辑区点击编辑是核心交互，express_editor 的退格只在「刚选完词」时能撤销
+#   选择，中间动过光标就退化成删字母，所以移动端必须用 fluid（2026-08-31 D12）。
+editor: fluid_editor

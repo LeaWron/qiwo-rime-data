@@ -62,7 +62,7 @@ engine:
     - punctuator
     - selector
     - navigator
-    - fluid_editor
+    - __include: qiwo_platform:/editor  # 编辑器按端选择：桌面 express、移动 fluid，见 qiwo_platform.yaml
   segmentors:
     - ascii_segmentor
     - matcher
