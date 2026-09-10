@@ -354,7 +354,9 @@ radical_lookup:
   dictionary: radical_pinyin
   enable_user_dict: false
   prefix: "uU"  # 反查前缀（反查时前缀会消失影响打英文所以设定为两个字母，或可改成一个非字母符号），与 recognizer/patterns/radical_lookup 匹配
-  tips: "uU〔拆字〕"  # 显示前缀，免得像把 uU 吃掉了
+  tips: "  〔拆字〕"
+  preedit_format:  # affix 段会剥掉前缀再交给翻译器，这里把前缀拼回编辑栏开头，免得像被吞掉
+    - xform/^/uU/
   comment_format:
     - erase/^.*$//
 # 部件拆字滤镜

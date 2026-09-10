@@ -249,7 +249,9 @@ radical_lookup:
   dictionary: radical_pinyin
   enable_user_dict: false
   prefix: "uU"
-  tips: "uU〔拆字〕"  # 显示前缀，免得像把 uU 吃掉了
+  tips: "  〔拆字〕"
+  preedit_format:  # affix 段会剥掉前缀再交给翻译器，这里把前缀拼回编辑栏开头，免得像被吞掉
+    - xform/^/uU/
   comment_format:
     - erase/^.*$//
 

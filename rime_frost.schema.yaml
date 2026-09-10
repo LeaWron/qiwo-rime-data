@@ -355,8 +355,9 @@ radical_lookup:
   dictionary: radical_pinyin
   enable_user_dict: false
   prefix: "u"  # 反查前缀，与 recognizer/patterns/radical_lookup 匹配
-  extra_tags: [ abc ]  # 同段也交给 abc 翻译器：u 开头的英文（melt_eng）照常出候选
-  tips: "u〔拆字〕"  # 显示前缀，免得像把 u 吃掉了
+  tips: "  〔拆字〕"
+  preedit_format:  # affix 段会剥掉前缀再交给翻译器，这里把前缀拼回编辑栏开头，免得像被吞掉
+    - xform/^/u/
   comment_format:
     - erase/^.*$//
 # 部件拆字滤镜
