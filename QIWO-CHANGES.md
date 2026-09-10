@@ -214,3 +214,4 @@ D12「全端统一 fluid_editor」在桌面上表现为「空格选词后还要�
 `qiwo_platform.yaml`。文件缺失会让所有引用它的方案编译失败（librime 沿用旧 build，
 静默出错），所以 `tools/validate.py` 与各端打包断言都检查它。
 
+- 2026-09-10：`qiwo_platform.yaml`（移动端默认）编辑器由 fluid_editor 改回 express_editor——Android 实际使用反馈不要整句编辑；两端默认均为 express，平台层机制保留。`tools/validate.py` 期望值同步。

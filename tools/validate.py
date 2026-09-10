@@ -175,7 +175,7 @@ def check_platform_layer() -> None:
     # 各方案 engine/processors 里的编辑器是 `__include: qiwo_platform:/editor`：
     # 文件缺失会让全部方案编译失败（librime 沿用旧 build，静默出错），所以根目录的
     # 移动端默认值必须在；桌面覆盖版也必须在（桌面三端打包时覆盖为 qiwo_platform.yaml）。
-    for name, editor in (("qiwo_platform.yaml", "fluid_editor"), ("qiwo_platform.desktop.yaml", "express_editor")):
+    for name, editor in (("qiwo_platform.yaml", "express_editor"), ("qiwo_platform.desktop.yaml", "express_editor")):
         path = ROOT / name
         if not path.exists():
             fail(f"缺少平台层文件 {name}")
