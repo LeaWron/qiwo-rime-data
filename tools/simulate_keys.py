@@ -15,8 +15,8 @@ RimeSimulateKeySequence / RimeGetContext 就够了。为了不碰运行中输入
 
 按键串语法同 RimeSimulateKeySequence：普通字符直接写，特殊键用 {space}
 {Return} {BackSpace} {Escape} 等。每个按键串独立执行：先打印结果，再用
-RimeClearComposition 清场（fluid_editor 下 Escape 只回退一步，清不干净会串台）。--dll 缺省从注册表 HKLM/SOFTWARE/WOW6432Node/Qiwo 的
-QiwoRoot 取 rime.dll。
+RimeClearComposition 清场（fluid_editor 下 Escape 只回退一步，清不干净会串台）。
+--dll 缺省从注册表 HKLM/SOFTWARE/WOW6432Node/Qiwo 的 QiwoRoot 取 rime.dll。
 """
 
 from __future__ import annotations
