@@ -14,8 +14,8 @@ RimeSimulateKeySequence / RimeGetContext 就够了。为了不碰运行中输入
       --schema rime_frost unite ushikou "nihao {space}"
 
 按键串语法同 RimeSimulateKeySequence：普通字符直接写，特殊键用 {space}
-{Return} {BackSpace} {Escape} 等。每个按键串独立执行：先打印结果，再按
-{Escape} 清场。--dll 缺省从注册表 HKLM/SOFTWARE/WOW6432Node/Qiwo 的
+{Return} {BackSpace} {Escape} 等。每个按键串独立执行：先打印结果，再用
+RimeClearComposition 清场（fluid_editor 下 Escape 只回退一步，清不干净会串台）。--dll 缺省从注册表 HKLM/SOFTWARE/WOW6432Node/Qiwo 的
 QiwoRoot 取 rime.dll。
 """
 
@@ -136,6 +136,7 @@ def main() -> int:
     rime.RimeGetCommit.argtypes = [SessionId, POINTER(RimeCommit)]
     rime.RimeGetCommit.restype = Bool
     rime.RimeFreeCommit.argtypes = [POINTER(RimeCommit)]
+    rime.RimeClearComposition.argtypes = [SessionId]
 
     traits = RimeTraits()
     traits.data_size = sizeof(RimeTraits) - sizeof(c_int)
@@ -190,7 +191,7 @@ def main() -> int:
         committed = commit_text()
         if committed is not None:
             print("%-14s committed: %r" % ("", committed))
-        rime.RimeSimulateKeySequence(sid, b"{Escape}")
+        rime.RimeClearComposition(sid)
     rime.RimeDestroySession(sid)
     return 0
 
