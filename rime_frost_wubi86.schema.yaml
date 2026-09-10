@@ -16,6 +16,7 @@ schema:
     - melt_eng        # 英文输入
     - radical_pinyin  # 部件拆字反查
     - rime_frost      # 临时拼音
+    - kMandarin       # 带声调注音（反查注音源）
 
 
 # 开关
@@ -248,7 +249,7 @@ radical_lookup:
   dictionary: radical_pinyin
   enable_user_dict: false
   prefix: "uU"
-  tips: "  〔拆字〕"
+  tips: "uU〔拆字〕"  # 显示前缀，免得像把 uU 吃掉了
   comment_format:
     - erase/^.*$//
 

@@ -15,6 +15,7 @@ schema:
     - cangjie5
     - stroke
     - radical_pinyin  # 部件拆字反查
+    - kMandarin       # 带声调注音（反查注音源）
 
 switches:
     - name: ascii_mode
@@ -191,7 +192,7 @@ radical_lookup:
   dictionary: radical_pinyin
   enable_user_dict: false
   prefix: "uU"
-  tips: "  〔拆字〕"
+  tips: "uU〔拆字〕"  # 显示前缀，免得像把 uU 吃掉了
   comment_format:
     - erase/^.*$//
 
