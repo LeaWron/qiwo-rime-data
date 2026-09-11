@@ -215,3 +215,13 @@ D12「全端统一 fluid_editor」在桌面上表现为「空格选词后还要�
 静默出错），所以 `tools/validate.py` 与各端打包断言都检查它。
 
 - 2026-09-10：`qiwo_platform.yaml`（移动端默认）编辑器由 fluid_editor 改回 express_editor——Android 实际使用反馈不要整句编辑；两端默认均为 express，平台层机制保留。`tools/validate.py` 期望值同步。
+
+### 符号触发 `/` 与 `v` 前缀并存（2026-09-10）
+
+9 月 1 日把符号键与全拼系识别模式从 `/` 改成 `v` 之后，桌面老习惯 `/pjm` 失效；
+而双拼/墨奇/五笔的识别模式仍是 `^/`、符号表的键却已是 `v…`，这些方案的符号
+功能实际上坏了。现在 `symbols_v.yaml` 每个符号同时有 `/xx` 与 `vxx` 两个键
+（`tools/symbols_dual_prefix.py` 维护，`tools/validate.py` 防漂移），全拼系识别
+模式改为 `^[/v](...)$`；双拼系保持 `^/`（`v` 是声母键），靠 `/` 键恢复可用。
+手机打不出 `/`，两种前缀互不冲突。
+

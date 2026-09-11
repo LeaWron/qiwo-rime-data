@@ -189,6 +189,26 @@ def check_platform_layer() -> None:
         if "fluid_editor" in text or "express_editor" in text:
             fail(f"{path.name}: 编辑器要经 __include: qiwo_platform:/editor 按端选择，不要写死")
 
+def check_symbols_dual_prefix() -> None:
+    # 符号触发：全拼系 v 前缀（手机打不出 /），桌面老习惯与双拼系 / 前缀（v 是双拼声母键）。
+    # 两种前缀都要能用，符号表就得两种键都有——tools/symbols_dual_prefix.py 维护，这里防漂移。
+    doc = load_yaml(ROOT / "symbols_v.yaml")
+    table = doc.get("symbols") if isinstance(doc, dict) else None
+    if not isinstance(table, dict):
+        fail("symbols_v.yaml: 没有 symbols 映射")
+        return
+    for key, value in table.items():
+        if not isinstance(key, str) or len(key) < 2 or key[0] not in "v/":
+            continue
+        twin = ("/" if key[0] == "v" else "v") + key[1:]
+        if twin not in table:
+            fail(f"symbols_v.yaml: {key!r} 缺另一种前缀的键 {twin!r}（跑 tools/symbols_dual_prefix.py）")
+        elif table[twin] != value:
+            fail(f"symbols_v.yaml: {key!r} 与 {twin!r} 的符号列表不一致")
+    text = (ROOT / "rime_frost.schema.yaml").read_text(encoding="utf-8")
+    if 'punct: "^[/v](' not in text:
+        fail("rime_frost.schema.yaml: recognizer/patterns/punct 应同时响应 / 与 v 前缀（^[/v](...)$）")
+
 def check_license_files() -> None:
     # 数据是 GPL-3.0：§4 要求许可证随分发，§5(a) 要求声明改动。
     # 各端打包时从这里拷（build.bat 的 LICENSE.rime-data.txt、CMake 的
@@ -212,6 +232,7 @@ def main() -> int:
     check_distributed_schemas(ids, parsed)
     check_lua_references()
     check_platform_layer()
+    check_symbols_dual_prefix()
     check_license_files()
     check_opencc_present()
 
